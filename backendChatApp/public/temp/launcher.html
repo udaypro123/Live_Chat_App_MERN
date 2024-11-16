@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+
+        function loadscormCourse() {
+            const maincontainer = document.getElementById("main")
+            const loader = document.getElementById("loader")
+            const message = document.querySelectorAll(".message")
+
+            loader.style.display = "block"
+
+            function getQueryParameter(param) {
+                const urlParams = new URLSearchParams(window.location.search)
+                return urlParams.get(param)
+            }
+
+            const launchUrl = getQueryParameter("launchUrl")
+
+            if (!launchUrl) {
+                showMessage("Error: missing scorm url. ")
+                return;
+            }
+
+            const useerId = "123"
+            const version = "2004"
+            const studentName = "uday chauhan"
+            const apiUrl = 'http://localhost:8000'
+
+            const apiSetting = {
+                lmsCommitUrl: `${apiUrl}/${useerId}/set-log`,
+                logLevel: 1,
+                autocommitSeconds: 5,
+                autoCommit: true,
+                xhrWithCredentials: false,
+                xhrHeaders: {
+                    accept: 'application/json',
+                },
+
+                responseHandler: res => {
+                    if (res.status == 406) {
+                        alert("please Login");
+                        window.close()
+                    }
+                },
+                
+            }
+
+
+
+            fetch(`${apiUrl}/${userId}/set-log`, {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                }
+
+            }).then((response) => {
+                if (response.status == 200) {
+                    return response.json()
+                } else {
+                    throw new Error("failed to retirve data")
+                }
+            })
+        }
+
+
+
+        function showMessage(msg) {
+            const message = document.querySelector(".message")
+            message.innerText = msg;
+            message.style.display = "block"
+        }
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
